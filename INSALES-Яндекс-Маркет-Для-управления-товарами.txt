@@ -1,0 +1,103 @@
+// Шаблон выгрузки
+
+<?xml version="1.0" encoding="utf-8"?>
+<yml_catalog date="{{'now' | date: '%Y-%m-%dT%H:%M%z'}}">
+  <shop>
+    <name>{{marketplace.shop_name}}</name>
+    <company>{{marketplace.company}}</company>
+    <url>{{marketplace.url}}</url>
+    <platform>inSales</platform>
+    <categories>
+    {% for collection in collections %}
+      <category id="{{collection.id}}" {% if collection.parent_id %}parentId="{{collection.parent_id}}"{% endif %}>{{collection.title}}</category>
+    {% endfor %}
+    </categories>
+    <email>info@premiumtehnika.ru</email>
+    <offers>
+      {{content_for_layout}}
+    </offers>
+  </shop>
+</yml_catalog>
+
+
+// Шаблон блока offer
+
+<offer id="{{product.id}}" >
+    <name>{{ product.title }}</name>
+    <vendor>{{product.properties.vendor}}</vendor>
+    <categoryId>{{collection.id}}</categoryId>
+    {% for image in product.images limit: 10 %}
+    <picture>{{image.url}}</picture>
+    {% endfor %}
+    <description>{{product.description}}</description>
+    <manufacturer_warranty>{% if product.full_properties.garantiynyy-srok.characteristics.size > 0 %}true{% else %}false{% endif %}</manufacturer_warranty>
+    <country_of_origin>{% for item in product.full_properties.strana-proizvoditel.characteristics %}{{ item.title }}{% unless forloop.last %}, {% endunless %}{% endfor %}</country_of_origin>
+    <barcode>{{product.variants[0].barcode}}</barcode>
+
+    {% for property in product.properties %}
+    <param name="{{property[0]}}">{{property[1]}}</param>
+    {% endfor %}
+
+    {% if product.variants[0].weight %}<weight>{{  product.variants[0].weight}}</weight>{% endif %}
+    {% if product.variants.first.dimensions.height %}
+    <dimensions>{{product.variants.first.dimensions.width}}/{{product.variants.first.dimensions.depth}}/{{product.variants.first.dimensions.height}}</dimensions>
+    {% endif %}
+
+    {% if product.full_properties.garantiynyy-srok.characteristics.size > 0 %}
+    {% capture garantiynyy-srok %}{% endcapture %} 
+
+    {% if product.full_properties.garantiynyy-srok.characteristics[0].title == '15 лет' %}
+    {% capture garantiynyy-srok %}P15Y{% endcapture %} 
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '4 года' %}
+    {% capture garantiynyy-srok %}P4Y{% endcapture %} 
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '1+2 года' %}
+    {% capture garantiynyy-srok %}P3Y{% endcapture %} 
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '1+2 года' %}
+    {% capture garantiynyy-srok %}P3Y{% endcapture %} 
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '6 лет' %}
+    {% capture garantiynyy-srok %}P6Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '1 год' %}
+    {% capture garantiynyy-srok %}P1Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '1,5 года' %}
+    {% capture garantiynyy-srok %}P1Y6M{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '1,5 года' %}
+    {% capture garantiynyy-srok %}P1Y6M{% endcapture %} 
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '18 мес' %}
+    {% capture garantiynyy-srok %}P1Y6M{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '1+1 год' %}
+    {% capture garantiynyy-srok %}P3Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '2 года' %}
+    {% capture garantiynyy-srok %}P2Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '3+2 года' %}
+    {% capture garantiynyy-srok %}P5Y{% endcapture %} 
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '3 года' %}
+    {% capture garantiynyy-srok %}P3Y{% endcapture %} 
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '5 лет' %}
+    {% capture garantiynyy-srok %}P5Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '7 лет' %}
+    {% capture garantiynyy-srok %}P7Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '10 лет' %}
+    {% capture garantiynyy-srok %}P10Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '8 лет' %}
+    {% capture garantiynyy-srok %}P8Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '20 лет' %}
+    {% capture garantiynyy-srok %}P20Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '17 лет' %}
+    {% capture garantiynyy-srok %}P17Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '16 лет' %}
+    {% capture garantiynyy-srok %}P16Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '19 лет' %}
+    {% capture garantiynyy-srok %}P19Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '18 лет' %}
+    {% capture garantiynyy-srok %}P18Y{% endcapture %}
+    {% elsif product.full_properties.garantiynyy-srok.characteristics[0].title == '6 месяцев' %}
+    {% capture garantiynyy-srok %}P6M{% endcapture %}
+    {% else %}
+    {% capture garantiynyy-srok %}false{% endcapture %} 
+    {% endif %}
+        
+    {% if garantiynyy-srok != 'false' %}<warranty-days>{{ garantiynyy-srok }}</warranty-days>{% endif %}
+    {% endif %}
+
+</offer>
+  

@@ -1,0 +1,38 @@
+// Шаблон выгрузки 
+
+<?xml version="1.0" encoding="utf-8"?>
+<yml_catalog date="{{'now' | date: '%Y-%m-%dT%H:%M%z'}}">
+  <shop>
+    <name>{{marketplace.shop_name}}</name>
+    <company>{{marketplace.company}}</company>
+    <url>{{marketplace.url}}</url>
+    <platform>inSales</platform>
+    {% if delivery_options != empty %}
+    <delivery-options>
+    {% for option in delivery_options %}
+      <option cost="{{option.cost}}" days="{{option.days}}" {% if option.order-before %}order-before="{{option.order-before}}" {% endif %} />
+    {% endfor %}
+    </delivery-options>
+    {% endif %}
+    <offers>
+      {{content_for_layout}}
+    </offers>
+  </shop>
+</yml_catalog>
+
+
+// Шаблон блока offer
+
+<offer id="{{product.id}}" >
+    <url>{{account.url}}/product_by_id/{{product.id}}</url>
+    <price>{{product.price}}</price>
+    {% if product.old_price %}
+    <oldprice>{{product.old_price}}</oldprice>
+    <enable_auto_discounts>true</enable_auto_discounts>
+    {% endif %}
+    <currencyId>{{product.currency_id}}</currencyId>
+    <vat>NO_VAT</vat>
+  <store>false</store>
+  <count>{{ product.variants[0].quantity | round: 0 }}</count>
+</offer>
+  
