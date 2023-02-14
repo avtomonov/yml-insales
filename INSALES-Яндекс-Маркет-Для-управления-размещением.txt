@@ -24,15 +24,14 @@
 // Шаблон блока offer
 
 <offer id="{{product.id}}" >
-    <url>{{account.url}}/product_by_id/{{product.id}}</url>
-    <price>{{product.price}}</price>
-    {% if product.old_price %}
-    <oldprice>{{product.old_price}}</oldprice>
-    <enable_auto_discounts>true</enable_auto_discounts>
-    {% endif %}
-    <currencyId>{{product.currency_id}}</currencyId>
-    <vat>NO_VAT</vat>
-  <store>false</store>
-  <count>{{ product.variants[0].quantity | round: 0 }}</count>
+  <url>{{account.url}}/product_by_id/{{product.id}}</url>
+  <price>{{product.price}}</price>
+  {% if product.old_price and product.old_price > product.price %}
+  <oldprice>{{product.old_price}}</oldprice>
+  <enable_auto_discounts>true</enable_auto_discounts>
+  {% endif %}
+  <currencyId>{{product.currency_id}}</currencyId>
+  <vat>NO_VAT</vat>
+<store>false</store>
+<count>{{ product.variants[0].quantity | round: 0 }}</count>
 </offer>
-  
